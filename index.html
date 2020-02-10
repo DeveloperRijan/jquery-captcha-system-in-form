@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Spam Protector</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+	<style type="text/css">
+		.heading{
+			margin: 30px; 
+			border-bottom: 1px solid #ddd; 
+			padding-bottom: 10px
+		}
+		#firstNumber{
+			
+		}
+		#secondNumber{
+			
+		}
+		#answer{
+		    padding: 2px 5px;
+		    border: 1px solid #ddd;
+		    border-radius: 5px;
+		    width: 100px;
+		}
+
+		.captcha_solve{
+			border: 1px solid #ddd;
+    		padding: 20px;
+		}
+
+		/* Chrome, Safari, Edge, Opera */
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+		  -webkit-appearance: none;
+		  margin: 0;
+		}
+
+		/* Firefox */
+		input[type=number] {
+		  -moz-appearance:textfield;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h3 class="text-center heading">Spam Protected Form</h3>
+		<div class="row">
+			<div class="col-md-3"></div>
+			<div class="col-md-6">
+			  <form id="myForm" action="" method="POST">
+			  	<div class="form-group">
+			  		<label><b>Enter Your Name</b></label>
+			  		<input class="form-control" type="text" name="name" placeholder="Your name..." required="1">
+			  	</div>
+			  	<div class="form-group">
+			  		<label><b>Enter Your Country</b></label>
+			  		<input class="form-control" type="text" name="country" placeholder="Your country..." required="1">
+			  	</div>
+			  	<div class="form-group captcha_solve">
+			  		<label><b>Are you human?</b></label>
+			  		<div>
+			  			Solve: <span id="firstNumber"></span> + <span id="secondNumber"></span>
+			  			<input id="answer" type="number" placeholder="answer..." required="1">
+			  		</div>
+			  		
+			  	</div>
+			  	<input type="submit" value="Submit" class="btn btn-primary">
+			  </form>
+			</div>
+			<div class="col-md-3"></div>
+		</div>
+	</div>
+	
+	<!-- scripts -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			generateRandomNumber();
+
+			$("#myForm").on("submit", function(e){
+				e.preventDefault()
+				//check captcha answer
+				let answer = parseInt($("#answer").val());
+				if (answer === "") {
+					alert('Please, prove you are a human by solving the math!')
+				}else{
+					let firstNum = parseInt($("#firstNumber").html())
+					let secondNum = parseInt($("#secondNumber").html())
+					let summation = firstNum + secondNum;
+					
+					if (summation === answer) {
+						alert('Congratulations!\n\nYou are a human & your request submitted successfully')
+						$("#myForm")[0].reset();
+						generateRandomNumber()
+					}else{
+						alert('Sorry!\n\nYour answer is wrong, please try again')
+						$("#answer").val("");
+						generateRandomNumber()
+					}
+				}
+				
+
+			})
+
+			function generateRandomNumber(){
+				let firstNumber = Math.floor(Math.random() * 30) + 1;
+				let secondNumber = Math.floor(Math.random() * 30) + 1;
+				//set value
+				$("#firstNumber").html(firstNumber)
+				$("#secondNumber").html(secondNumber)
+			}
+		})
+	</script>
+</body>
+</html>
